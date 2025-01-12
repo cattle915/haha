@@ -49,25 +49,36 @@ jobs:
         wget https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
         tar -xjf ffmpeg-snapshot.tar.bz2
         cd ffmpeg
-
+        
     - name: Configure FFmpeg
       run: |
-        sudo ./configure --enable-gpl --enable-libx264 --enable-libx265 --enable-libvpx --enable-libfdk-aac --enable-nonfree
-
+          sudo ./configure \
+            --prefix=/usr/local \
+            --enable-gpl \
+            --enable-libass \
+            --enable-libfdk-aac \
+            --enable-libfreetype \
+            --enable-libmp3lame \
+            --enable-libopus \
+            --enable-libvorbis \
+            --enable-libvpx \
+            --enable-libx264 \
+            --enable-libx265 \
+            --enable-nonfree
+            
       working-directory: ffmpeg
-
-    - name: Compile FFmpeg
+      
+    - name: Build FFmpeg
       run: |
-        make -j$(nproc)
-
-      working-directory: ffmpeg
-
-    - name: Install FFmpeg
+          make -j$(nproc)
+          sudo make install
+    - name: Verify FFmpeg installation
       run: |
-        sudo make install
+          ffmpeg -version
 
-      working-directory: ffmpeg
+    - name: Upload FFmpeg as artifact (optional)
+      uses: actions/upload-artifact@v3
+      with:
+          name: ffmpeg-binaries
+          path: /usr/local/bin/ffmpeg
 
-    - name: Verify installation
-      run: |
-        ffmpeg -version
