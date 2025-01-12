@@ -15,13 +15,39 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install -y yasm nasm autoconf automake build-essential cmake git libtool pkg-config zlib1g-dev
+        sudo apt-get install -y \
+            autoconf \
+            automake \
+            build-essential \
+            cmake \
+            git \
+            libass-dev \
+            libfreetype6-dev \
+            libsdl2-dev \
+            libtool \
+            libva-dev \
+            libvdpau-dev \
+            libvorbis-dev \
+            libxcb1-dev \
+            libxcb-shm0-dev \
+            libxcb-xfixes0-dev \
+            pkg-config \
+            texinfo \
+            wget \
+            yasm \
+            zlib1g-dev \
+            libx264-dev \
+            libx265-dev \
+            libvpx-dev \
+            libfdk-aac-dev \
+            libmp3lame-dev \
+            libopus-dev
 
     - name: Download FFmpeg source
       run: |
         wget https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
         tar -xjf ffmpeg-snapshot.tar.bz2
-        cd ffmpeg*
+        cd ffmpeg
 
     - name: Configure FFmpeg
       run: |
