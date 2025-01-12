@@ -1,0 +1,30 @@
+name: Build MyffmpegMake
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      squid-proxy:
+        image: ubuntu/squid:latest
+        ports:
+          - 3128:3128
+ 
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+      
+    - name: KeepLive
+      run: touch /tmp/keepalive
+      
+    - name: SetEnv
+
+      run:  |
+             eval ${{ vars.SETENV1 }}
+           
+    - name: SSH connection to Actions
+      uses: P3TERX/ssh2actions@main
