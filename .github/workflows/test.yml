@@ -53,7 +53,7 @@ jobs:
       run: |
         sudo ./configure --enable-gpl --enable-libx264 --enable-libx265 --enable-libvpx --enable-libfdk-aac --enable-nonfree
 
-      working-directory: ffmpeg*
+      working-directory: ffmpeg
 
     - name: Compile FFmpeg
       run: |
