@@ -57,6 +57,7 @@ jobs:
           wget https://ffmpeg.org/releases/ffmpeg-6.0.tar.gz
           tar -xzf ffmpeg-6.0.tar.gz
           cd ffmpeg-6.0
+          ls
 
     - name: Configure FFmpeg
       run: |
