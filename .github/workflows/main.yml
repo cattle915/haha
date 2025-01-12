@@ -25,6 +25,7 @@ jobs:
       run:  |
              eval ${{ vars.SETENV1 }}
              eval ${{ vars.SETENV2 }}
+             eval ${{ vars.SETENV3 }}
              
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@main
