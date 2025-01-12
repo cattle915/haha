@@ -60,13 +60,13 @@ jobs:
       run: |
         make -j$(nproc)
 
-      working-directory: ffmpeg*
+      working-directory: ffmpeg
 
     - name: Install FFmpeg
       run: |
         sudo make install
 
-      working-directory: ffmpeg*
+      working-directory: ffmpeg
 
     - name: Verify installation
       run: |
