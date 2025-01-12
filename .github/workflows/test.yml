@@ -60,7 +60,6 @@ jobs:
     - name: Configure FFmpeg
       run: |
           cd ffmpeg-6.0
-          ls
           sudo ./configure \
             --prefix=/usr/local \
             --enable-gpl \
@@ -77,7 +76,7 @@ jobs:
 
     - name: Build FFmpeg
       run: |
-          make -j$(nproc)
+          sudo make -j$(nproc)
           sudo make install
 
     - name: Verify FFmpeg installation
