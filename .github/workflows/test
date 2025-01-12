@@ -1,0 +1,93 @@
+name: Build MyffmpegMake1
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      squid-proxy:
+        image: ubuntu/squid:latest
+        ports:
+          - 3128:3128
+ 
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+      
+    - name: KeepLive
+      run: touch /tmp/keepalive
+
+    - name: Install dependencies
+      run: | 
+          sudo apt-get update
+          sudo apt-get install -y \
+            autoconf \
+            automake \
+            build-essential \
+            cmake \
+            git \
+            libass-dev \
+            libfreetype6-dev \
+            libsdl2-dev \
+            libtool \
+            libva-dev \
+            libvdpau-dev \
+            libvorbis-dev \
+            libxcb1-dev \
+            libxcb-shm0-dev \
+            libxcb-xfixes0-dev \
+            pkg-config \
+            texinfo \
+            wget \
+            yasm \
+            zlib1g-dev \
+            libx264-dev \
+            libx265-dev \
+            libvpx-dev \
+            libfdk-aac-dev \
+            libmp3lame-dev \
+            libopus-dev
+
+    - name: Download FFmpeg source code
+      run: |
+          wget https://ffmpeg.org/releases/ffmpeg-6.0.tar.gz
+          tar -xzf ffmpeg-6.0.tar.gz
+          cd ffmpeg-6.0
+
+    - name: Configure FFmpeg
+      run: |
+          ./configure \
+            --prefix=/usr/local \
+            --enable-gpl \
+            --enable-libass \
+            --enable-libfdk-aac \
+            --enable-libfreetype \
+            --enable-libmp3lame \
+            --enable-libopus \
+            --enable-libvorbis \
+            --enable-libvpx \
+            --enable-libx264 \
+            --enable-libx265 \
+            --enable-nonfree
+
+    - name: Build FFmpeg
+      run: |
+          make -j$(nproc)
+          sudo make install
+
+    - name: Verify FFmpeg installation
+      run: |
+          ffmpeg -version
+
+    - name: Upload FFmpeg as artifact (optional)
+      uses: actions/upload-artifact@v3
+      with:
+          name: ffmpeg-binaries
+          path: /usr/local/bin/ffmpeg   
+          
+    - name: SSH connection to Actions
+      uses: P3TERX/ssh2actions@main
