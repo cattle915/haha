@@ -1,93 +1,44 @@
-name: Build MyffmpegMake1
+name: Build FFmpeg
 
-on:
-  repository_dispatch:
-  workflow_dispatch:
+on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      squid-proxy:
-        image: ubuntu/squid:latest
-        ports:
-          - 3128:3128
- 
     steps:
-    - name: Checkout
-      uses: actions/checkout@main
-      
-    - name: KeepLive
-      run: touch /tmp/keepalive
+    - name: Checkout code
+      uses: actions/checkout@v2
 
     - name: Install dependencies
-      run: | 
-          sudo apt-get update
-          sudo apt-get install -y \
-            autoconf \
-            automake \
-            build-essential \
-            cmake \
-            git \
-            libass-dev \
-            libfreetype6-dev \
-            libsdl2-dev \
-            libtool \
-            libva-dev \
-            libvdpau-dev \
-            libvorbis-dev \
-            libxcb1-dev \
-            libxcb-shm0-dev \
-            libxcb-xfixes0-dev \
-            pkg-config \
-            texinfo \
-            wget \
-            yasm \
-            zlib1g-dev \
-            libx264-dev \
-            libx265-dev \
-            libvpx-dev \
-            libfdk-aac-dev \
-            libmp3lame-dev \
-            libopus-dev
-
-    - name: Download FFmpeg source code
       run: |
-          wget https://ffmpeg.org/releases/ffmpeg-6.0.tar.gz
-          tar -xzf ffmpeg-6.0.tar.gz
+        sudo apt update
+        sudo apt install -y yasm nasm autoconf automake build-essential cmake git libtool pkg-config zlib1g-dev
+
+    - name: Download FFmpeg source
+      run: |
+        wget https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
+        tar -xjf ffmpeg-snapshot.tar.bz2
+        cd ffmpeg*
 
     - name: Configure FFmpeg
       run: |
-          cd ffmpeg-6.0
-          sudo ./configure \
-            --prefix=/usr/local \
-            --enable-gpl \
-            --enable-libass \
-            --enable-libfdk-aac \
-            --enable-libfreetype \
-            --enable-libmp3lame \
-            --enable-libopus \
-            --enable-libvorbis \
-            --enable-libvpx \
-            --enable-libx264 \
-            --enable-libx265 \
-            --enable-nonfree
+        ./configure --enable-gpl --enable-libx264 --enable-libx265 --enable-libvpx --enable-libfdk-aac --enable-nonfree
 
-    - name: Build FFmpeg
+      working-directory: ffmpeg*
+
+    - name: Compile FFmpeg
       run: |
-          sudo make -j$(nproc)
-          sudo make install
+        make -j$(nproc)
 
-    - name: Verify FFmpeg installation
+      working-directory: ffmpeg*
+
+    - name: Install FFmpeg
       run: |
-          ffmpeg -version
+        sudo make install
 
-    - name: Upload FFmpeg as artifact (optional)
-      uses: actions/upload-artifact@v3
-      with:
-          name: ffmpeg-binaries
-          path: /usr/local/bin/ffmpeg   
-          
-    - name: SSH connection to Actions
-      uses: P3TERX/ssh2actions@main
+      working-directory: ffmpeg*
+
+    - name: Verify installation
+      run: |
+        ffmpeg -version
