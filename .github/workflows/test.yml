@@ -52,7 +52,19 @@ jobs:
         
     - name: Configure FFmpeg
       run: |
-               sudo ./configure --enable-gpl --enable-libx264 --enable-libx265 --enable-libvpx --enable-libfdk-aac --enable-nonfree
+          sudo  ./configure \
+            --prefix=/usr/local \
+            --enable-gpl \
+            --enable-libass \
+            --enable-libfdk-aac \
+            --enable-libfreetype \
+            --enable-libmp3lame \
+            --enable-libopus \
+            --enable-libvorbis \
+            --enable-libvpx \
+            --enable-libx264 \
+            --enable-libx265 \
+            --enable-nonfree
             
       working-directory: ffmpeg
     - name: Compile FFmpeg
@@ -63,7 +75,8 @@ jobs:
     - name: Install FFmpeg
       run: |
         sudo make install
-          
+
+      working-directory: ffmpeg
     - name: Verify FFmpeg installation
       run: |
           ffmpeg -version
