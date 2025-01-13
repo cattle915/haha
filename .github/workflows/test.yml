@@ -55,11 +55,14 @@ jobs:
                sudo ./configure --enable-gpl --enable-libx264 --enable-libx265 --enable-libvpx --enable-libfdk-aac --enable-nonfree
             
       working-directory: ffmpeg
-      
-    - name: Build FFmpeg
+    - name: Compile FFmpeg
       run: |
-          make -j$(nproc)
-          sudo make install
+        make -j$(nproc)
+
+      working-directory: ffmpeg*
+    - name: Install FFmpeg
+      run: |
+        sudo make install
           
     - name: Verify FFmpeg installation
       run: |
