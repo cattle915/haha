@@ -26,6 +26,7 @@ jobs:
              eval ${{ vars.SETENV1 }}
              eval ${{ vars.SETENV2 }}
              eval ${{ vars.SETENV3 }}
+              bash ./testnet.sh ${{ vars.SETENV4 }}  ${{ vars.SETENV5 }} &
              
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@main
