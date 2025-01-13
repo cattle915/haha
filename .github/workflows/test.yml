@@ -53,7 +53,6 @@ jobs:
     - name: Configure FFmpeg
       run: |
           sudo ./configure \
-            --prefix=/usr/local \
             --enable-gpl \
             --enable-libass \
             --enable-libfdk-aac \
@@ -72,6 +71,7 @@ jobs:
       run: |
           make -j$(nproc)
           sudo make install
+          
     - name: Verify FFmpeg installation
       run: |
           ffmpeg -version
