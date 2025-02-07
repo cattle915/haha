@@ -98,7 +98,7 @@ jobs:
           ffmpeg -version
 
     - name: Upload FFmpeg as artifact (optional)
-      uses: actions/upload-artifact@latest
+      uses: actions/upload-artifact@v4
       with:
           name: ffmpeg-binaries
           path: /usr/local/bin/ffmpeg
