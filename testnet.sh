@@ -11,8 +11,8 @@ if ping -c 5  -W 1 "$TARGET_IP" > /dev/null; then
         echo "$(date): Ping to $TARGET_IP successful."
     else
         echo "$(date): Ping to $TARGET_IP failed."
-        echo "$(date): Restarting $2 service..."
-        sudo systemctl restart $2
+        #echo "$(date): Restarting $2 service..."
+        #sudo systemctl restart $2
 fi
 
 # 等待一段时间后继续监控
